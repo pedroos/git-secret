@@ -1,10 +1,3 @@
----
-layout: post
-title:  'git-secret'
-date:   2020-09-20 15:12:56 -0400
-permalink: git-secret
-categories: usage
----
 git-secret - bash tool to store private data inside a git repo.
 =============================================
 
@@ -14,7 +7,7 @@ These steps cover the basic process of using `git-secret`:
 
 0. Before starting, [make sure you have created a `gpg` RSA key-pair](#using-gpg): a public and a secret key identified by your email address.
 
-1. Begin with an existing or new git repository. You'll use the 'git secret' commands to add the keyrings and information
+1. Begin with an existing or new git repository. You'll use the 'git-secret' commands to add the keyrings and information
 to make `git-secret` hide and reveal files in this repository.
 
 2. Initialize the `git-secret` repository by running `git secret init` command. The `.gitsecret/` folder will be created.
@@ -68,7 +61,7 @@ gpg --gen-key
 To export your public key, run:
 
 ```shell
-gpg --export your.email@address.com --armor > public-key.gpg
+gpg --armor --export your.email@address.com > public-key.gpg
 ```
 
 To import the public key of someone else (to share the secret with them for instance), run:
@@ -88,15 +81,14 @@ One way of doing it is the following:
 
 1. [create a gpg key](#using-gpg) for your CI/CD environment. You can chose any name and email address you want: for instance `MyApp CodeShip <myapp@codeship.com>`
 if your app is called MyApp and your CI/CD provider is CodeShip. It is easier not to define a password for that key.
-2. run `gpg --export-secret-key myapp@codeship.com --armor` to get your private key value
+2. run `gpg --armor --export-secret-key myapp@codeship.com` to get your private key value
 3. Create an env var on your CI/CD server `GPG_PRIVATE_KEY` and assign it the private key value.
 4. Then write your Continuous Deployment build script. For instance:
 
 ```shell
-# Install git-secret (https://git-secret.io/installation), for instance, for debian:
-echo "deb https://dl.bintray.com/sobolevn/deb git-secret main" | sudo tee -a /etc/apt/sources.list
-wget -qO - https://api.bintray.com/users/sobolevn/keys/gpg/public.key | sudo apt-key add -
-sudo apt-get update && sudo apt-get install git-secret
+# As the first step: install git-secret,
+# see: https://git-secret.io/installation
+
 # Create private key file
 echo $GPG_PRIVATE_KEY > ./private_key.gpg
 # Import private key
@@ -109,7 +101,7 @@ git secret reveal
 Note: your CI/CD might not allow you to create a multiline value. In that case, you can export it on one line with
 
 ```shell
-gpg --export-secret-key myapp@codeship.com --armor | tr '\n' ','
+gpg --armor --export-secret-key myapp@codeship.com | tr '\n' ','
 ```
 
 You can then create your private key file with:
@@ -149,7 +141,7 @@ and about which public/private key sets can access the encrypted data.
 
 You can change the name of this directory using the SECRETS_DIR environment variable.
 
-Use the various 'git secret' commands to manipulate the files in `.gitsecret`,
+Use the various 'git-secret' commands to manipulate the files in `.gitsecret`,
 you should not change the data in these files directly.
 
 Exactly which files exist in the `.gitsecret` folder and what their contents are
